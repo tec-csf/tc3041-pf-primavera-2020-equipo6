@@ -11,7 +11,12 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "express": "*",
+    "body-parser": "*",
+    "ejs": "^2.4.2",
+    "morgan": "*",
+    "neo4j-driver": "*"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +38,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "author": "",
+  "license": "ISC"
 }
