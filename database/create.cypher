@@ -1,6 +1,7 @@
 CREATE CONSTRAINT ON (movie:Movie) ASSERT movie.id IS UNIQUE;
 CREATE CONSTRAINT ON (genre:Genre) ASSERT genre.id IS UNIQUE;
 CREATE CONSTRAINT ON (person:Person) ASSERT person.id IS UNIQUE;
+CREATE CONSTRAINT ON (user:User) ASSERT user.id IS UNIQUE;
 CREATE CONSTRAINT ON (keyword:Keyword) ASSERT keyword.id IS UNIQUE;
 
 LOAD CSV WITH HEADERS FROM "file:///genres.csv" AS row
