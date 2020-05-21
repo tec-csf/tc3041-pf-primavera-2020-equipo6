@@ -1,0 +1,57 @@
+type Movie {
+  id: Int
+  title: String
+  genres: [Genre] @relation(name: "IN_GENRE", direction: "OUT")
+  actors: [Person] @relation(name: "ACTED_IN", direction: "IN")
+  director: [Person] @relation(name: "DIRECTED", direction: "IN")
+  keywords: [Keyword] @relation(name: "HAS_KEYWORD", direction: "OUT")
+  likes: Int @cypher(statement: "OPTIONAL MATCH (:User)-[l:LIKES]->(this) RETURN COUNT(l.score)")
+  related(first: Int = 3): [Movie]
+    @cypher(
+      statement: """
+        MATCH (this)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie)
+
+        WITH this, rec, COUNT(*) AS gs
+
+        OPTIONAL MATCH (this)<-[:ACTED_IN]-(a:Person)-[:ACTED_IN]->(rec)
+        WITH this, rec, gs, COUNT(a) AS as
+
+        OPTIONAL MATCH (this)<-[:DIRECTED]-(d:Person)-[:DIRECTED]->(rec)
+        WITH this, rec, gs, as, COUNT(d) AS ds
+
+        OPTIONAL MATCH (this)-[:HAS_KEYWORD]->(k:Keyword)<-[:HAS_KEYWORD]-(rec)
+        WITH this, rec, gs, as, ds, COUNT(k) AS ks
+
+        WITH rec, gs, as, ds, ks, (1*gs)+(1*as)+(1*ds)+(1*ks) AS score ORDER BY score DESC LIMIT $first
+        RETURN rec
+      """
+    )
+}
+
+type User {
+  id: String
+  name: String
+  similarity: Int @cypher(statement: "MATCH (this) RETURN COUNT(this)")
+}
+
+type Genre {
+  id: Int
+  name: String
+}
+
+type Person {
+  id: Int
+  name: String
+}
+
+type Keyword {
+  id: Int
+  name: String
+}
+
+type Query {
+  moviesByTitle(substring: String = "inc"): [Movie]
+    @cypher(
+      statement: "MATCH (m:Movie) WHERE m.title CONTAINS $substring RETURN m"
+    )
+}
