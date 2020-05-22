@@ -27,6 +27,7 @@ import {
 
 import MovieList from "./components/MovieList";
 import UserList from "./components/UserList";
+import Recommend from "./components/Recommend";
 import classNames from "classnames";
 import "./App.css";
 
@@ -202,6 +203,7 @@ class App extends Component {
             <div className={classes.appBarSpacer} />
             <Typography component="div" className={classes.chartContainer}>
               <Switch>
+                <Route exact path="/" component={Recommend} />
                 <Route exact path="/movies" component={MovieList} />
                 <Route exact path="/users" component={UserList} />
               </Switch>
