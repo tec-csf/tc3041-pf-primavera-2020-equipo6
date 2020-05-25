@@ -46,6 +46,7 @@ const GET_MOVIE = gql`
       id
       title
       likes
+      poster_url
     }
   }
 `;
@@ -119,7 +120,10 @@ function Recommend(props) {
                 onSwipe={dir => swiped(dir, n.title)}
                 onCardLeftScreen={() => outOfFrame(n.title)}
               >
-                <div className="card">
+                <div
+                  style={{ backgroundImage: "url(" + n.poster_url + ")" }}
+                  className="card"
+                >
                   <h3>{n.title}</h3>
                 </div>
               </TinderCard>

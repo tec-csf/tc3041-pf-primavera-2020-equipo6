@@ -5,6 +5,13 @@ type Movie {
   actors: [Person] @relation(name: "ACTED_IN", direction: "IN")
   director: [Person] @relation(name: "DIRECTED", direction: "IN")
   keywords: [Keyword] @relation(name: "HAS_KEYWORD", direction: "OUT")
+  poster_url: String
+    @cypher(
+      statement: """
+        MATCH (this)-[:HAS_POSTER]->(p:Poster)
+        RETURN p.poster_url
+        """
+    )
   likes: Int @cypher(statement: "OPTIONAL MATCH (:User)-[l:LIKES]->(this) RETURN COUNT(l.score)")
   related(first: Int = 3): [Movie]
     @cypher(
@@ -47,6 +54,30 @@ type Person {
 type Keyword {
   id: Int
   name: String
+}
+
+type Poster {
+  poster_url: String
+}
+
+type MutationType {
+  test(user_id:String!, user_name:String!): User
+    @cypher(
+      statement: "MERGE (u:User {id:$user_id, name:$user_name}) return u"
+    )
+  
+  rateMovie(user_id:String!, user_name:String!, movie_id:Int!, score:Int!): Int
+    @cypher(
+      statement:"""
+        MERGE (u:User {id:$user_id, name:$user_name})
+        WITH u
+        MATCH (m:Movie {id:$movie_id})
+        WITH u, m
+        MERGE (u)-[l:LIKES]->(m)
+        SET l.score=$score
+        RETURN l.score
+      """
+    )
 }
 
 type Query {

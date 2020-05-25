@@ -1,7 +1,9 @@
 import csv
+import tmdbsimple as tmdb
 
 from ast import literal_eval
 
+BASE_URL = 'https://image.tmdb.org/t/p/w300'
 
 def readCsvFile(filename):
     # initializing the titles and rows list
@@ -103,12 +105,39 @@ def genActorRelations(rows):
             res.append(entry)
     return fields, res
 
+def getMoviePosters(rows):
+    res = []
+    fields = ['movie_id', 'movie_title', 'poster_url']
+    for i, row in enumerate(rows):
+        movie_title = row['title']
+        movie_id = row['id']
+        # Add up to 5 actors per movie
+        movie = tmdb.Movies(movie_id)
+        try:
+            response = movie.info()
+        except:
+            continue
+        url = response['poster_path']
+        if url is None:
+            continue
+        poster_url = BASE_URL + url
+        entry = {
+            'movie_id': movie_id,
+            'movie_title': movie_title,
+            'poster_url': poster_url
+        }
+        res.append(entry)
+    return fields, res
+
 
 def main():
+    tmdb.API_KEY = 'f191d6e48bdc99b7c4efe47235236f3a'
     rows_d = readCsvFile("dataset/tmdb_5000_movies.csv")
     rows_c = readCsvFile("dataset/tmdb_5000_credits.csv")
     columnsToObject(rows_d, ['genres', 'keywords'])
     columnsToObject(rows_c, ['cast', 'crew'])
+    posters_f, posters_r = getMoviePosters(rows_d)
+    writeToFile('gen/posters.csv', posters_f, posters_r)
     genres_f, genres_r = genGenreRelations(rows_d)
     writeToFile('gen/genres.csv', genres_f, genres_r)
     keyword_f, keyword_r = genKeywordRelations(rows_d)

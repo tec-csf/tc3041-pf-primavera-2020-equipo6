@@ -23,3 +23,8 @@ LOAD CSV WITH HEADERS FROM "file:///keyword.csv" AS row
 MERGE (m:Movie {id: toInteger(row.movie_id), title:row.movie_title})
 MERGE (k:Keyword {id: toInteger(row.keyword_id), name:row.keyword_name})
 MERGE (m)-[:HAS_KEYWORD]->(k);
+
+LOAD CSV WITH HEADERS FROM "file:///posters.csv" AS row
+MERGE (m:Movie {id: toInteger(row.movie_id), title:row.movie_title})
+MERGE (p:Poster {poster_url:row.poster_url})
+MERGE (m)-[:HAS_POSTER]->(p);
