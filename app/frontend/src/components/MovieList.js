@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import "./MovieList.css";
 import { withStyles } from "@material-ui/core/styles";
+import app from "../base";
 import {
   Table,
   TableBody,
@@ -167,9 +168,7 @@ function MovieList(props) {
                   <TableCell component="th" scope="row">
                     {n.title}
                   </TableCell>
-                  <TableCell>
-                    {n.likes ? n.likes.toFixed(2) : "-"}
-                  </TableCell>
+                  <TableCell>{n.likes ? n.likes.toFixed(2) : "-"}</TableCell>
                   <TableCell>{n.id}</TableCell>
                 </TableRow>
               );

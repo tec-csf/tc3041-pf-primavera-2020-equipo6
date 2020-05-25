@@ -31,6 +31,7 @@ h1 {
 }
 
 .cardContainer {
+  margin: auto;
   width: 90vw;
   max-width: 260px;
   height: 300px;

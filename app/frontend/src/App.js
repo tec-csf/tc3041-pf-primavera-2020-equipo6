@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { withRouter } from "react-router";
 import { withStyles } from "@material-ui/core/styles";
+import { AuthProvider } from "./Auth.js";
+import PrivateRoute from "./PrivateRoute";
 
 import {
   AppBar,
@@ -25,11 +27,16 @@ import {
   Theaters as TheatersIcon
 } from "@material-ui/icons";
 
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+
 import MovieList from "./components/MovieList";
 import UserList from "./components/UserList";
 import Recommend from "./components/Recommend";
+import login from "./components/login";
+import signup from "./components/signup";
 import classNames from "classnames";
 import "./App.css";
+import app from "./base";
 
 const drawerWidth = 240;
 
@@ -122,95 +129,114 @@ class App extends Component {
     const { classes } = this.props;
 
     return (
-      <React.Fragment>
-        <CssBaseline />
-        <div className={classes.root}>
-          <AppBar
-            position="absolute"
-            className={classNames(
-              classes.appBar,
-              this.state.open && classes.appBarShift
-            )}
-          >
-            <Toolbar
-              disableGutters={!this.state.open}
-              className={classes.toolbar}
-            >
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
+      <AuthProvider>
+        <React.Fragment>
+          <Router>
+            <CssBaseline />
+            <div className={classes.root}>
+              <AppBar
+                position="absolute"
                 className={classNames(
-                  classes.menuButton,
-                  this.state.open && classes.menuButtonHidden
+                  classes.appBar,
+                  this.state.open && classes.appBarShift
                 )}
               >
-                <MenuIcon />
-              </IconButton>
-              <Typography
-                component="h1"
-                variant="h2"
-                color="inherit"
-                noWrap
-                className={classes.title}
+                <Toolbar
+                  disableGutters={!this.state.open}
+                  className={classes.toolbar}
+                >
+                  <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={this.handleDrawerOpen}
+                    className={classNames(
+                      classes.menuButton,
+                      this.state.open && classes.menuButtonHidden
+                    )}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                  <Typography
+                    component="h1"
+                    variant="h2"
+                    color="inherit"
+                    noWrap
+                    className={classes.title}
+                  >
+                    Movies
+                  </Typography>
+                </Toolbar>
+              </AppBar>
+              <Drawer
+                variant="permanent"
+                classes={{
+                  paper: classNames(
+                    classes.drawerPaper,
+                    !this.state.open && classes.drawerPaperClose
+                  )
+                }}
+                open={this.state.open}
               >
-                MOVIE rec.
-              </Typography>
-            </Toolbar>
-          </AppBar>
-          <Drawer
-            variant="permanent"
-            classes={{
-              paper: classNames(
-                classes.drawerPaper,
-                !this.state.open && classes.drawerPaperClose
-              )
-            }}
-            open={this.state.open}
-          >
-            <div className={classes.toolbarIcon}>
-              <IconButton onClick={this.handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
+                <div className={classes.toolbarIcon}>
+                  <IconButton onClick={this.handleDrawerClose}>
+                    <ChevronLeftIcon />
+                  </IconButton>
+                </div>
+                <Divider />
+                <Link to="/" className="navLink">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <DashboardIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Home" />
+                  </ListItem>
+                </Link>
+                <Link to="/movies" className="navLink">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <TheatersIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Movies" />
+                  </ListItem>
+                </Link>
+                <Link to="/users" className="navLink">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <PeopleIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Users" />
+                  </ListItem>
+                </Link>
+                <Link
+                  to="/login"
+                  onClick={() => app.auth().signOut()}
+                  className="navLink"
+                >
+                  <ListItem button>
+                    <ListItemIcon>
+                      <ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Signout" />
+                  </ListItem>
+                </Link>
+              </Drawer>
+              <main className={classes.content}>
+                <div className={classes.appBarSpacer} />
+
+                <Typography component="div" className={classes.chartContainer}>
+                  <Switch>
+                    <PrivateRoute exact path="/" component={Recommend} />
+                    <PrivateRoute exact path="/movies" component={MovieList} />
+                    <PrivateRoute exact path="/users" component={UserList} />
+                    <Route exact path="/signup" component={signup} />
+                    <Route exact path="/login" component={login} />
+                  </Switch>
+                </Typography>
+              </main>
             </div>
-            <Divider />
-            <Link to="/" className="navLink">
-              <ListItem button>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Home" />
-              </ListItem>
-            </Link>
-            <Link to="/movies" className="navLink">
-              <ListItem button>
-                <ListItemIcon>
-                  <TheatersIcon />
-                </ListItemIcon>
-                <ListItemText primary="Movies" />
-              </ListItem>
-            </Link>
-            <Link to="/users" className="navLink">
-              <ListItem button>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Users" />
-              </ListItem>
-            </Link>
-          </Drawer>
-          <main className={classes.content}>
-            <div className={classes.appBarSpacer} />
-            <Typography component="div" className={classes.chartContainer}>
-              <Switch>
-                <Route exact path="/" component={Recommend} />
-                <Route exact path="/movies" component={MovieList} />
-                <Route exact path="/users" component={UserList} />
-              </Switch>
-            </Typography>
-          </main>
-        </div>
-      </React.Fragment>
+          </Router>
+        </React.Fragment>
+      </AuthProvider>
     );
   }
 }

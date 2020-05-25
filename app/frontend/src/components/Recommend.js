@@ -3,6 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 import TinderCard from "react-tinder-card";
 import gql from "graphql-tag";
 import "./Recommend.css";
+import app from "../base";
 import { withStyles } from "@material-ui/core/styles";
 import {
   Table,
@@ -104,7 +105,7 @@ function Recommend(props) {
   return (
     <Paper className={classes.root}>
       <Typography variant="h2" gutterBottom>
-        Movies
+        Welcome {app.auth().currentUser.displayName} !
       </Typography>
       {loading && !error && <p>Loading...</p>}
       {error && !loading && <p>Error</p>}
