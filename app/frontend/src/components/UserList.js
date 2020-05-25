@@ -44,6 +44,7 @@ const GET_USER = gql`
     User(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
       id
       name
+      email
       similarity
     }
   }
@@ -146,16 +147,16 @@ function UserList(props) {
                 </Tooltip>
               </TableCell>
               <TableCell
-                key="id"
-                sortDirection={orderBy === "id" ? order : false}
+                key="email"
+                sortDirection={orderBy === "email" ? order : false}
               >
                 <Tooltip title="Sort" placement="bottom-start" enterDelay={300}>
                   <TableSortLabel
-                    active={orderBy === "id"}
+                    active={orderBy === "email"}
                     direction={order}
-                    onClick={() => handleSortRequest("id")}
+                    onClick={() => handleSortRequest("email")}
                   >
-                    ID
+                    Email
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -169,7 +170,7 @@ function UserList(props) {
                     {n.name}
                   </TableCell>
                   <TableCell>{n.likes ? n.likes.toFixed(2) : "-"}</TableCell>
-                  <TableCell>{n.id}</TableCell>
+                  <TableCell>{n.email}</TableCell>
                 </TableRow>
               );
             })}

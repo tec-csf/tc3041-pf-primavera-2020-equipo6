@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import TinderCard from "react-tinder-card";
 import gql from "graphql-tag";
 import "./Recommend.css";
@@ -51,6 +51,40 @@ const GET_MOVIE = gql`
   }
 `;
 
+const LIKE_MOVIE = gql`
+  mutation like(
+    $user_id: String!
+    $user_name: String!
+    $user_email: String!
+    $movie_id: Int!
+    $score: Int!
+  ) {
+    rateMovie(
+      user_id: $user_id
+      user_name: $user_name
+      user_email: $user_email
+      movie_id: $movie_id
+      score: $score
+    )
+  }
+`;
+
+const FAVORITE_MOVIE = gql`
+  mutation favorite(
+    $user_id: String!
+    $user_name: String!
+    $user_email: String!
+    $movie_id: Int!
+  ) {
+    favoriteMovie(
+      user_id: $user_id
+      user_name: $user_name
+      user_email: $user_email
+      movie_id: $movie_id
+    )
+  }
+`;
+
 function Recommend(props) {
   const { classes } = props;
   const [order, setOrder] = React.useState("asc");
@@ -59,8 +93,46 @@ function Recommend(props) {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
 
-  const swiped = (direction, name) => {
-    console.log("removing: " + name);
+  const swiped = (direction, movie_id) => {
+    var score = 0;
+    switch (direction) {
+      case "left":
+        score = -1;
+        break;
+      case "right":
+        score = 1;
+        break;
+      case "up":
+        score = 0;
+        break;
+      case "down":
+        return;
+      default:
+        console.log("Error: action unknown " + direction);
+    }
+    var user_id = app.auth().currentUser.uid;
+    var user_name = app.auth().currentUser.displayName;
+    var user_email = app.auth().currentUser.email;
+    if (score) {
+      addLike({
+        variables: {
+          user_id: user_id,
+          user_name: user_name,
+          user_email: user_email,
+          movie_id: movie_id,
+          score: score
+        }
+      });
+    } else {
+      addFavorite({
+        variables: {
+          user_id: user_id,
+          user_name: user_name,
+          user_email: user_email,
+          movie_id: movie_id
+        }
+      });
+    }
   };
 
   const outOfFrame = name => {
@@ -72,6 +144,9 @@ function Recommend(props) {
       ? { title_contains: filterState.titleFilter }
       : {};
   };
+
+  const [addLike] = useMutation(LIKE_MOVIE);
+  const [addFavorite] = useMutation(FAVORITE_MOVIE);
 
   const { loading, data, error } = useQuery(GET_MOVIE, {
     variables: {
@@ -117,7 +192,7 @@ function Recommend(props) {
               <TinderCard
                 className="swipe"
                 key={n.id}
-                onSwipe={dir => swiped(dir, n.title)}
+                onSwipe={dir => swiped(dir, n.id)}
                 onCardLeftScreen={() => outOfFrame(n.title)}
               >
                 <div

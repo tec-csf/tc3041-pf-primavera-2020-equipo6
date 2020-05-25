@@ -38,6 +38,7 @@ type Movie {
 type User {
   id: String
   name: String
+  email: String
   similarity: Int @cypher(statement: "MATCH (this) RETURN COUNT(this)")
 }
 
@@ -60,22 +61,29 @@ type Poster {
   poster_url: String
 }
 
-type MutationType {
-  test(user_id:String!, user_name:String!): User
-    @cypher(
-      statement: "MERGE (u:User {id:$user_id, name:$user_name}) return u"
-    )
-  
-  rateMovie(user_id:String!, user_name:String!, movie_id:Int!, score:Int!): Int
+type Mutation {
+  rateMovie(user_id:String!, user_name:String!, user_email:String!, movie_id:Int!, score:Int!): Int
     @cypher(
       statement:"""
-        MERGE (u:User {id:$user_id, name:$user_name})
+        MERGE (u:User {id:$user_id, name:$user_name, email:$user_email})
         WITH u
         MATCH (m:Movie {id:$movie_id})
         WITH u, m
         MERGE (u)-[l:LIKES]->(m)
         SET l.score=$score
         RETURN l.score
+      """
+    )
+
+  favoriteMovie(user_id:String!, user_name:String!, user_email:String!, movie_id:Int!): String
+    @cypher(
+      statement:"""
+        MERGE (u:User {id:$user_id, name:$user_name, email:$user_email})
+        WITH u
+        MATCH (m:Movie {id:$movie_id})
+        WITH u, m
+        MERGE (u)-[:FAVORITE]->(m)
+        RETURN u.name
       """
     )
 }
