@@ -11,6 +11,17 @@ const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_URI
 });
 
+client.defaultOptions = {
+  watchQuery: {
+    fetchPolicy: "network-only",
+    errorPolicy: "ignore"
+  },
+  query: {
+    fetchPolicy: "network-only",
+    errorPolicy: "all"
+  }
+};
+
 const Main = () => (
   <BrowserRouter>
     <ApolloProvider client={client}>

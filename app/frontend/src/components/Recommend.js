@@ -15,7 +15,8 @@ import {
   Paper,
   TableSortLabel,
   Typography,
-  TextField
+  TextField,
+  Button
 } from "@material-ui/core";
 
 const styles = theme => ({
@@ -90,7 +91,7 @@ function Recommend(props) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("title");
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
 
   const swiped = (direction, movie_id) => {
@@ -106,7 +107,7 @@ function Recommend(props) {
         score = 0;
         break;
       case "down":
-        return;
+        break;
       default:
         console.log("Error: action unknown " + direction);
     }
@@ -137,6 +138,7 @@ function Recommend(props) {
 
   const outOfFrame = name => {
     console.log(name + " left the screen!");
+    refetch();
   };
 
   const getFilter = () => {
@@ -145,10 +147,14 @@ function Recommend(props) {
       : {};
   };
 
+  const reloadcards = () => {
+    refetch();
+  };
+
   const [addLike] = useMutation(LIKE_MOVIE);
   const [addFavorite] = useMutation(FAVORITE_MOVIE);
 
-  const { loading, data, error } = useQuery(GET_MOVIE, {
+  const { loading, data, error, refetch } = useQuery(GET_MOVIE, {
     variables: {
       first: rowsPerPage,
       offset: rowsPerPage * page,
@@ -193,7 +199,7 @@ function Recommend(props) {
                 className="swipe"
                 key={n.id}
                 onSwipe={dir => swiped(dir, n.id)}
-                onCardLeftScreen={() => outOfFrame(n.title)}
+                onCardLeftScreen={() => refetch()}
               >
                 <div
                   style={{ backgroundImage: "url(" + n.poster_url + ")" }}
@@ -204,6 +210,7 @@ function Recommend(props) {
               </TinderCard>
             );
           })}
+          <Button onClick={() => reloadcards()}>Cargar mas!</Button>
         </div>
       )}
     </Paper>
