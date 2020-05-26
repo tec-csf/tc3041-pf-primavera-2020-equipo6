@@ -30,7 +30,7 @@ type User {
         RETURN xyDotProduct / (xLength * yLength) as sim
       """
     )
-  
+
 }
 
 type Genre {
@@ -99,10 +99,12 @@ type Query {
   recommendedMovies(user_id:String): [Movie]
     @cypher(
       statement: """
-        MATCH (u:User {id:user_id})-[l:LIKES{score:1}]->(m:Movie)
-        MATCH (m)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie) WHERE NOT ((u)-[:LIKES]->(rec) OR (u)-[:FAVORITE]->(rec))
+      MATCH (m:Movie)
+      OPTIONAL MATCH (u:User {id:$user_id})-[l:LIKES{score:1}]->(m:Movie)
+      WITH m, u ORDER BY l LIMIT 20
+      MATCH (m)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie) WHERE NOT ((u)-[:LIKES]->(rec) OR (u)-[:FAVORITE]->(rec))
 
-        WITH m, rec, COUNT(*) AS gs
+        WITH m, rec, COUNT(*) AS gs ORDER BY gs DESC LIMIT 10
 
         OPTIONAL MATCH (m)<-[:ACTED_IN]-(a:Person)-[:ACTED_IN]->(rec)
         WITH m, rec, gs, COUNT(a) AS as
