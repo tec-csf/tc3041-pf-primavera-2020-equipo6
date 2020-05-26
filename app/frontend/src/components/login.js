@@ -1,19 +1,9 @@
 import React, { useCallback, useContext } from "react";
 import { withRouter, Redirect } from "react-router";
-import propTypes from "prop-types";
-// UI
-import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 //Firebase
 import app from "../base";
 import { AuthContext } from "../Auth.js";
 import { Link } from "react-router-dom";
-//import classes from '*.module.css';
-
-//import Catalog from './src/Catalog.js'
-//import './App.css';
 
 const Login = ({ history }) => {
   const handleLogin = useCallback(

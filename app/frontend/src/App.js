@@ -22,7 +22,6 @@ import {
   Menu as MenuIcon,
   ChevronLeft as ChevronLeftIcon,
   Dashboard as DashboardIcon,
-  EventNote as EventNoteIcon,
   People as PeopleIcon,
   Theaters as TheatersIcon
 } from "@material-ui/icons";
@@ -255,7 +254,5 @@ class App extends Component {
     );
   }
 }
-
-const Business = () => <div></div>;
 
 export default withRouter(withStyles(styles)(App));

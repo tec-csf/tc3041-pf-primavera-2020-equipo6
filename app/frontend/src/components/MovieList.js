@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/react-hooks";
 import gql from "graphql-tag";
 import "./MovieList.css";
 import { withStyles } from "@material-ui/core/styles";
-import app from "../base";
 import {
   Table,
   TableBody,
@@ -53,8 +52,8 @@ function MovieList(props) {
   const { classes } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("title");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page] = React.useState(0);
+  const [rowsPerPage] = React.useState(10);
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
 
   const getFilter = () => {

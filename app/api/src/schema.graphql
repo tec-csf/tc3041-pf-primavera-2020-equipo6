@@ -100,6 +100,7 @@ type Query {
     @cypher(
       statement: """
       MATCH (m:Movie)
+      WITH m ORDER BY rand()
       OPTIONAL MATCH (u:User {id:$user_id})-[l:LIKES{score:1}]->(m:Movie)
       WITH m, u ORDER BY l LIMIT 20
       MATCH (m)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie) WHERE NOT ((u)-[:LIKES]->(rec) OR (u)-[:FAVORITE]->(rec))
@@ -116,7 +117,7 @@ type Query {
         WITH m, rec, gs, as, ds, COUNT(k) AS ks
 
         WITH rec, gs, as, ds, ks, (1*gs)+(1*as)+(1*ds)+(1*ks) AS score ORDER BY score DESC LIMIT 10
-        RETURN rec
+        RETURN DISTINCT rec
       """
     )
 

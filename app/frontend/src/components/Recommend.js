@@ -1,22 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, useLazyQuery, useMutation } from "@apollo/react-hooks";
+import React, { useEffect } from "react";
+import { useLazyQuery, useMutation } from "@apollo/react-hooks";
 import TinderCard from "react-tinder-card";
 import gql from "graphql-tag";
 import "./Recommend.css";
 import app from "../base";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Tooltip,
-  Paper,
-  TableSortLabel,
-  Typography,
-  TextField
-} from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -82,15 +71,14 @@ const FAVORITE_MOVIE = gql`
 
 function Recommend(props) {
   const { classes } = props;
-  const [moviesLeft, setMoviesLeft] = useState(10);
   var movieCount = 10;
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getMovies(), []);
 
   const swiped = (direction, movie_id) => {
     var score = 0;
     movieCount--;
-    console.log(movieCount);
     if (movieCount < 1) {
       getMovies();
       movieCount = 10;
@@ -137,7 +125,6 @@ function Recommend(props) {
   };
 
   const outOfFrame = name => {
-    console.log(name + " left the screen!");
     return true;
   };
 
@@ -145,16 +132,18 @@ function Recommend(props) {
   const [addFavorite] = useMutation(FAVORITE_MOVIE);
   const [getMovies, { loading, data, error }] = useLazyQuery(GET_MOVIE, {
     variables: {
-      user_id: app.auth().currentUser.uid
+      user_id: app.auth().currentUser ? app.auth().currentUser.uid : null
     },
     fetchPolicy: "network-only"
   });
 
   return (
     <Paper className={classes.root}>
-      <Typography variant="h2" gutterBottom>
-        Welcome {app.auth().currentUser.displayName} !
-      </Typography>
+      {app.auth().currentUser && (
+        <Typography variant="h2" gutterBottom>
+          Welcome {app.auth().currentUser.displayName} !
+        </Typography>
+      )}
       {loading && !error && <p>Loading...</p>}
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (

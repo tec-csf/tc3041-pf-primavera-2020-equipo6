@@ -56,8 +56,6 @@ function MovieList(props) {
   const { classes } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("title");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
 
   const EraseFavorite = (movie_id, movie_title) => {
@@ -72,12 +70,6 @@ function MovieList(props) {
   };
 
   const [RemoveFavorite] = useMutation(REMOVE_FAVORITE);
-
-  const getFilter = () => {
-    return filterState.titleFilter.length > 0
-      ? { title_contains: filterState.titleFilter }
-      : {};
-  };
 
   const { loading, data, error, refetch } = useQuery(GET_MOVIE, {
     variables: {
