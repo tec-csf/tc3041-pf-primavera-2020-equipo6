@@ -28,12 +28,14 @@ import {
 } from "@material-ui/icons";
 
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
 
 import MovieList from "./components/MovieList";
 import UserList from "./components/UserList";
 import Recommend from "./components/Recommend";
 import login from "./components/login";
 import signup from "./components/signup";
+import Favorite from "./components/Favorite";
 import classNames from "classnames";
 import "./App.css";
 import app from "./base";
@@ -207,6 +209,14 @@ class App extends Component {
                     <ListItemText primary="Users" />
                   </ListItem>
                 </Link>
+                <Link to="/favorites" className="navLink">
+                  <ListItem button>
+                    <ListItemIcon>
+                      <StarBorderIcon />
+                    </ListItemIcon>
+                    <ListItemText primary="Favorites" />
+                  </ListItem>
+                </Link>
                 <Link
                   to="/login"
                   onClick={() => app.auth().signOut()}
@@ -228,6 +238,11 @@ class App extends Component {
                     <PrivateRoute exact path="/" component={Recommend} />
                     <PrivateRoute exact path="/movies" component={MovieList} />
                     <PrivateRoute exact path="/users" component={UserList} />
+                    <PrivateRoute
+                      exact
+                      path="/favorites"
+                      component={Favorite}
+                    />
                     <Route exact path="/signup" component={signup} />
                     <Route exact path="/login" component={login} />
                   </Switch>
