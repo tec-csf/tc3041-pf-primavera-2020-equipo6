@@ -13,33 +13,24 @@ type Movie {
         """
     )
   likes: Int @cypher(statement: "OPTIONAL MATCH (:User)-[l:LIKES]->(this) RETURN COUNT(l.score)")
-  related(first: Int = 3): [Movie]
-    @cypher(
-      statement: """
-        MATCH (this)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie)
-
-        WITH this, rec, COUNT(*) AS gs
-
-        OPTIONAL MATCH (this)<-[:ACTED_IN]-(a:Person)-[:ACTED_IN]->(rec)
-        WITH this, rec, gs, COUNT(a) AS as
-
-        OPTIONAL MATCH (this)<-[:DIRECTED]-(d:Person)-[:DIRECTED]->(rec)
-        WITH this, rec, gs, as, COUNT(d) AS ds
-
-        OPTIONAL MATCH (this)-[:HAS_KEYWORD]->(k:Keyword)<-[:HAS_KEYWORD]-(rec)
-        WITH this, rec, gs, as, ds, COUNT(k) AS ks
-
-        WITH rec, gs, as, ds, ks, (1*gs)+(1*as)+(1*ds)+(1*ks) AS score ORDER BY score DESC LIMIT $first
-        RETURN rec
-      """
-    )
 }
 
 type User {
   id: String
   name: String
   email: String
-  similarity: Int @cypher(statement: "MATCH (this) RETURN COUNT(this)")
+  similarity(curr_id:String): Float
+    @cypher(
+      statement: """
+        MATCH (p1:User {id: curr_id})-[x:LIKES]->(m:Movie)<-[y:LIKES]-(this)
+        WITH COUNT(m) AS numbermovies, SUM(x.score * y.score) AS xyDotProduct,
+        SQRT(REDUCE(xDot = 0.0, a IN COLLECT(x.score) | xDot + a^2)) AS xLength,
+        SQRT(REDUCE(yDot = 0.0, b IN COLLECT(y.score) | yDot + b^2)) AS yLength,
+        p1, this WHERE numbermovies > 5
+        RETURN xyDotProduct / (xLength * yLength) as sim
+      """
+    )
+  
 }
 
 type Genre {
@@ -86,6 +77,17 @@ type Mutation {
         RETURN u.name
       """
     )
+
+  removeFavorite(user_id: String!, movie_id: Int!): String
+  @cypher(
+    statement:"""
+      MATCH(u:User{id:$user_id})
+      MATCH(m:Movie{id:$movie_id})
+      WITH u,m
+      MERGE (u)-[f:FAVORITE]->(m)
+      DELETE f
+    """
+  )
 }
 
 type Query {
@@ -93,4 +95,36 @@ type Query {
     @cypher(
       statement: "MATCH (m:Movie) WHERE m.title CONTAINS $substring RETURN m"
     )
+
+  recommendedMovies(user_id:String): [Movie]
+    @cypher(
+      statement: """
+        MATCH (u:User {id:user_id})-[l:LIKES{score:1}]->(m:Movie)
+        MATCH (m)-[:IN_GENRE]->(g:Genre)<-[:IN_GENRE]-(rec:Movie) WHERE NOT ((u)-[:LIKES]->(rec) OR (u)-[:FAVORITE]->(rec))
+
+        WITH m, rec, COUNT(*) AS gs
+
+        OPTIONAL MATCH (m)<-[:ACTED_IN]-(a:Person)-[:ACTED_IN]->(rec)
+        WITH m, rec, gs, COUNT(a) AS as
+
+        OPTIONAL MATCH (m)<-[:DIRECTED]-(d:Person)-[:DIRECTED]->(rec)
+        WITH m, rec, gs, as, COUNT(d) AS ds
+
+        OPTIONAL MATCH (m)-[:HAS_KEYWORD]->(k:Keyword)<-[:HAS_KEYWORD]-(rec)
+        WITH m, rec, gs, as, ds, COUNT(k) AS ks
+
+        WITH rec, gs, as, ds, ks, (1*gs)+(1*as)+(1*ds)+(1*ks) AS score ORDER BY score DESC LIMIT 10
+        RETURN rec
+      """
+    )
+
+  userFavoriteMovies(user_id:String): [Movie]
+  @cypher(
+    statement: """
+      MATCH (u:User {id:$user_id})
+      WITH u
+      MATCH(u) - [:FAVORITE] -> (m:Movie)
+      return m
+    """
+  )
 }

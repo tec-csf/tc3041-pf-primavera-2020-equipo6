@@ -1,5 +1,5 @@
-import React from "react";
-import { useQuery, useMutation } from "@apollo/react-hooks";
+import React, { useState } from "react";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/react-hooks";
 import TinderCard from "react-tinder-card";
 import gql from "graphql-tag";
 import "./Recommend.css";
@@ -36,13 +36,8 @@ const styles = theme => ({
 });
 
 const GET_MOVIE = gql`
-  query moviesPaginateQuery(
-    $first: Int
-    $offset: Int
-    $orderBy: [_MovieOrdering]
-    $filter: _MovieFilter
-  ) {
-    Movie(first: $first, offset: $offset, orderBy: $orderBy, filter: $filter) {
+  query movies($user_id: String) {
+    recommendedMovies(user_id: $user_id) {
       id
       title
       likes
@@ -87,14 +82,17 @@ const FAVORITE_MOVIE = gql`
 
 function Recommend(props) {
   const { classes } = props;
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("title");
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [filterState, setFilterState] = React.useState({ titleFilter: "" });
+  const [moviesLeft, setMoviesLeft] = useState(10);
+  var movieCount = 10;
 
   const swiped = (direction, movie_id) => {
     var score = 0;
+    movieCount--;
+    console.log(movieCount);
+    if (movieCount < 1) {
+      getMovies();
+      movieCount = 10;
+    }
     switch (direction) {
       case "left":
         score = -1;
@@ -106,7 +104,7 @@ function Recommend(props) {
         score = 0;
         break;
       case "down":
-        return;
+        return true;
       default:
         console.log("Error: action unknown " + direction);
     }
@@ -133,61 +131,38 @@ function Recommend(props) {
         }
       });
     }
+    return true;
   };
 
   const outOfFrame = name => {
     console.log(name + " left the screen!");
-  };
-
-  const getFilter = () => {
-    return filterState.titleFilter.length > 0
-      ? { title_contains: filterState.titleFilter }
-      : {};
+    return true;
   };
 
   const [addLike] = useMutation(LIKE_MOVIE);
   const [addFavorite] = useMutation(FAVORITE_MOVIE);
-
-  const { loading, data, error } = useQuery(GET_MOVIE, {
+  const [getMovies, { loading, data, error }] = useLazyQuery(GET_MOVIE, {
     variables: {
-      first: rowsPerPage,
-      offset: rowsPerPage * page,
-      orderBy: orderBy + "_" + order,
-      filter: getFilter()
-    }
+      user_id: app.auth().currentUser.uid
+    },
+    fetchPolicy: "network-only"
   });
-
-  const handleSortRequest = property => {
-    const newOrderBy = property;
-    let newOrder = "desc";
-
-    if (orderBy === property && order === "desc") {
-      newOrder = "asc";
-    }
-
-    setOrder(newOrder);
-    setOrderBy(newOrderBy);
-  };
-
-  const handleFilterChange = filterName => event => {
-    const val = event.target.value;
-
-    setFilterState(oldFilterState => ({
-      ...oldFilterState,
-      [filterName]: val
-    }));
-  };
 
   return (
     <Paper className={classes.root}>
       <Typography variant="h2" gutterBottom>
         Welcome {app.auth().currentUser.displayName} !
       </Typography>
+      {
+        <button value="Load Movies" onClick={getMovies}>
+          Get Movies
+        </button>
+      }
       {loading && !error && <p>Loading...</p>}
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (
         <div className="cardContainer">
-          {data.Movie.map(n => {
+          {data.recommendedMovies.map(n => {
             return (
               <TinderCard
                 className="swipe"

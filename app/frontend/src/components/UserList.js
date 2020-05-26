@@ -36,6 +36,7 @@ const styles = theme => ({
 
 const GET_USER = gql`
   query usersPaginateQuery(
+    $curr_id: String
     $first: Int
     $offset: Int
     $orderBy: [_UserOrdering]
@@ -45,7 +46,7 @@ const GET_USER = gql`
       id
       name
       email
-      similarity
+      similarity(curr_id: $curr_id)
     }
   }
 `;
@@ -66,6 +67,7 @@ function UserList(props) {
 
   const { loading, data, error } = useQuery(GET_USER, {
     variables: {
+      curr_id: app.auth().currentUser.uid,
       first: rowsPerPage,
       offset: rowsPerPage * page,
       orderBy: orderBy + "_" + order,
@@ -163,13 +165,20 @@ function UserList(props) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {data.User.map(n => {
+            {data.User.filter(function(n) {
+              if (n.id == app.auth().currentUser.uid) {
+                return false;
+              }
+              return true;
+            }).map(n => {
               return (
                 <TableRow key={n.id}>
                   <TableCell component="th" scope="row">
                     {n.name}
                   </TableCell>
-                  <TableCell>{n.likes ? n.likes.toFixed(2) : "-"}</TableCell>
+                  <TableCell>
+                    {n.similarity ? n.similarity.toFixed(2) : "-"}
+                  </TableCell>
                   <TableCell>{n.email}</TableCell>
                 </TableRow>
               );
