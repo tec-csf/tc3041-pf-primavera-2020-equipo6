@@ -15,8 +15,7 @@ import {
   Paper,
   TableSortLabel,
   Typography,
-  TextField,
-  Button
+  TextField
 } from "@material-ui/core";
 
 const styles = theme => ({
@@ -140,10 +139,6 @@ function Recommend(props) {
     return true;
   };
 
-  const reloadcards = () => {
-    refetch();
-  };
-
   const [addLike] = useMutation(LIKE_MOVIE);
   const [addFavorite] = useMutation(FAVORITE_MOVIE);
   const [getMovies, { loading, data, error }] = useLazyQuery(GET_MOVIE, {
@@ -173,7 +168,7 @@ function Recommend(props) {
                 className="swipe"
                 key={n.id}
                 onSwipe={dir => swiped(dir, n.id)}
-                onCardLeftScreen={() => refetch()}
+                onCardLeftScreen={() => outOfFrame(n.title)}
               >
                 <div
                   style={{ backgroundImage: "url(" + n.poster_url + ")" }}
@@ -184,7 +179,6 @@ function Recommend(props) {
               </TinderCard>
             );
           })}
-          <Button onClick={() => reloadcards()}>Cargar mas!</Button>
         </div>
       )}
     </Paper>
