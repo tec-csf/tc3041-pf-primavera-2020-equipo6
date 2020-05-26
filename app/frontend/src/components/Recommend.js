@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useLazyQuery, useMutation } from "@apollo/react-hooks";
 import TinderCard from "react-tinder-card";
 import gql from "graphql-tag";
@@ -85,6 +85,8 @@ function Recommend(props) {
   const [moviesLeft, setMoviesLeft] = useState(10);
   var movieCount = 10;
 
+  useEffect(() => getMovies(), []);
+
   const swiped = (direction, movie_id) => {
     var score = 0;
     movieCount--;
@@ -153,11 +155,6 @@ function Recommend(props) {
       <Typography variant="h2" gutterBottom>
         Welcome {app.auth().currentUser.displayName} !
       </Typography>
-      {
-        <button value="Load Movies" onClick={getMovies}>
-          Get Movies
-        </button>
-      }
       {loading && !error && <p>Loading...</p>}
       {error && !loading && <p>Error</p>}
       {data && !loading && !error && (
