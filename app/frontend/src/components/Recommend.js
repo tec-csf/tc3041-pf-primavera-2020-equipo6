@@ -71,17 +71,20 @@ const FAVORITE_MOVIE = gql`
 
 function Recommend(props) {
   const { classes } = props;
-  var movieCount = 10;
+  var movieCount = 0;
+
+  const setMovieCount = length => {
+    movieCount = length;
+  };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getMovies(), []);
 
   const swiped = (direction, movie_id) => {
     var score = 0;
-    movieCount--;
+    setMovieCount(movieCount - 1);
     if (movieCount < 1) {
       getMovies();
-      movieCount = 10;
     }
     switch (direction) {
       case "left":
@@ -134,7 +137,8 @@ function Recommend(props) {
     variables: {
       user_id: app.auth().currentUser ? app.auth().currentUser.uid : null
     },
-    fetchPolicy: "network-only"
+    fetchPolicy: "network-only",
+    onCompleted: data => setMovieCount(data.recommendedMovies.length)
   });
 
   return (
