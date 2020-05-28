@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 ()
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api
+  name: api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 ()
+      creationTimestamp: null
+      labels:
+        io.kompose.service: api
+    spec:
+      containers:
+      - env:
+        - name: GRAPHQL_LISTEN_PORT
+          value: "4001"
+        - name: GRAPHQL_URI
+          value: http://api:4001/graphql
+        - name: NEO4J_PASSWORD
+          value: cubells
+        - name: NEO4J_URI
+          value: bolt+ssc://db.semy.io:7687
+        - name: NEO4J_USER
+          value: neo4j
+        image: semylevy/movie-api
+        imagePullPolicy: ""
+        name: api
+        ports:
+        - containerPort: 4001
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}
