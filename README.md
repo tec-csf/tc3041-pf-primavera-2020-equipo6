@@ -4,10 +4,10 @@
 ---
 
 ##### Integrantes:
-1. *[Poner aquí Nombre y Apellidos del integrante 1]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-2. *[Poner aquí Nombre y Apellidos del integrante 2]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-3. *[Poner aquí Nombre y Apellidos del integrante 3]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
-4. *[Poner aquí Nombre y Apellidos del integrante 4]* - *[Poner aquí su Matrícula]* - *[Poner aquí su campus]*
+1. *Salomon Levy Becherano* - *A01023530* - *TEC SF*
+2. *Sebastian Gonzalo Vives Faus* - *A01025211* - *TEC CSF*
+3. *Luis Armando Ortiz Revilla* - *A01022320* - *TEC CSF*
+4. *Luis Antonio García García* - *A01021865* - *TEC CSF*
 
 ---
 ## 1. Aspectos generales
@@ -55,7 +55,22 @@ Como parte de la entrega final del proyecto, se debe incluir la siguiente inform
 
 ## 2. Descripción del proyecto
 
-*[Incluya aquí la descripción del proyecto seleccionado.]*
+El proyecto desarrollado consiste en una sistema de recomendación de película. El propóstio del sistema es descubrir nuevas peliculas a traves de tus gustos en otras películas que te hayan gustado. El sistema te pregunta qué películas te han gustado y cuáles no, en una interfaz similar a “Tinder”, en donde aparecen una tarjeta a la vez, conteniendo el nombre y póster de una película. El usuario puede hacer swipe a la derecha, izquierda, arriba o abajo. Cada acción tiene un significado diferente:
+- Swipe a la derecha (botón like): Me gusta esta pelicula.
+- Swipe a la izquierda (botón tache): Me disgusta esta película.
+- Swipe hacia abajo (botón dismiss): No he visto esta película.
+- Swipe hacia arriba (botón favorito): Quiero ver esta película (guardar película).
+
+Para modelar la solución se modelaron varios procesos de negocio para que el sistema fuera más interactivo. Los procesos que se modelaron consisten en :
+- Creación de usuarios y login.
+- Sesiones.
+- Sistema de recomendaciones.
+- Acciones sobre la película (Swipes).
+- Lista de favoritos.
+- Lista de todas las películas (filtrado por nombre, likes o género)
+- Lista de usuarios (filtrado por similitud de gustos).
+
+
 
 ## 3. Solución
 
@@ -63,7 +78,12 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 
 ### 3.1 Modelos de *bases de datos* utilizados
 
-*[Incluya aquí una explicación del análisis realizado y la justificación de los modelos de *bases de datos* seleccionados. Incluya todo lo que considere necesario para que una persona sin conocimientos técnicos pueda entender de que trata su solución.]*
+Los modelos que se usan en la solución son Neo4j y Firebase.
+No4j como modelo de grafos fue la opcón para modelar los nodos y relaciones principales de nuestro  proyecto, el esquema que definimos para la solución es el siguiente :
+
+El motivo por el cuál elejimos Neo4j es por el manejo de varios nodos y relaciones que pueden exitir sin ser complicado, además dela alta disponibilidad, la rapidez de las consultas y sobre el query que manejamos para hacer la relación de que películas recomendará la aplicación.
+
+Firebase es el servicio que usamos como parte de autenticación de usuarios y manejo de sesiones
 
 ### 3.2 Arquitectura de la solución
 
@@ -74,15 +94,23 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 *[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
 
 #### 3.3.1 Lenguaje de programación
+- Javascript
+- Css
+- JSON
+- HTML
 #### 3.3.2 Framework
+- React
 #### 3.3.3 Librerías de funciones o dependencias
-
+Node
 ### 3.4 Backend
 
 *[Incluya aquí una explicación de la solución utilizada para el backend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
 
 #### 3.4.1 Lenguaje de programación
+- JSON
+- Javascript
 #### 3.4.2 Framework
+- GraphQL
 #### 3.4.3 Librerías de funciones o dependencias
 
 ### 3.5 API
