@@ -1,6 +1,6 @@
 # TC3041 Proyecto Final Primavera 2020
 
-# *[Poner aquí el Título del Proyecto]*
+# Sistema de recomendación de películas
 ---
 
 ##### Integrantes:
@@ -143,4 +143,14 @@ Exsted dos formas de utilizar el proyecto:
 Ya que una de las opciones que hayamos elegido nos muestre la página de login es necesario crear una cuenta si no se tiene una, para eso se da click en "click here" donde seremos redirigidos a la interfaz de crear cuenta donde ingresaremos un nombre de usuario, mail (estos dos primeros pasos deben ser únicos) y finalmente una contraseña de 6 caracteres como mínimos. Si todo está correcto o ya tenemos cuenta e ingresamos bien los datos y damos login se nos ingresa a la interfaz principal donde tendremos la película que nos está recomendando y ya podremos hacer los 4 tipos de swipe (swipe arriba agrega esa película a la sección de favoritos). Otras acciones que podremos realiazar son la busqueda de películas, ver el número de likes y filtrados en la sección movies, esto mismo para la sección de users donde veremos que usuarios tienen más parecidos gustos a nosotros, siendo 1 el valor de más parecido y -1 el de menos parecido, la seccion de favorites funciona similar ya que encontraremos películas que fuerno agregadas a nuestra lista y podremos ver la información de sus likes y nombre, además del filtrado y busqueda, también es posible borrar una película de favoritos con el botón borrar. Finalmente si deseamos cerrar sesión, únicamente se da click en la opción signout y seremos redirigidos a la pantalla de login donde si deseamos volver a ingresar hay que repetir este proceso.
 ## 4. Referencias
 
-*[Incluya aquí las referencias a sitios de interés, datasets y cualquier otra información que haya utilizado para realizar el proyecto y que le puedan ser de utilidad a otras personas que quieran usarlo como referencia]*
+- https://neo4j.com/graphacademy/online-training/data-science/
+- https://auth0.com/
+- https://neo4j.com/docs/graph-algorithms/current/labs-algorithms/jaccard/
+- https://github.com/tec-csf/tc3041-pf-primavera-2020-equipo6
+- http://guides.neo4j.com/sandbox/recommendations
+- https://neo4j.com/developer/neo4j-cloud-aws-ec2-ami/?_ga=2.38760035.1125792768.1590423787-1046712168.1587386293
+- http://techgenix.com/namecheap-aws-ec2-linux/
+- https://medium.com/neo4j/getting-certificates-for-neo4j-with-letsencrypt-a8d05c415bbd
+- https://community.neo4j.com/t/troubleshooting-connection-issues-to-neo4j/129
+- https://kops.sigs.k8s.io/getting_started/aws/#cluster-state-storage
+- https://www.digitalocean.com/community/tutorials/how-to-migrate-a-docker-compose-workflow-to-kubernetes
