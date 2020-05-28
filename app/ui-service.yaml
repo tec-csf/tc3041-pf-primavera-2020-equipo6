@@ -4,6 +4,12 @@ metadata:
   annotations:
     kompose.cmd: kompose convert
     kompose.version: 1.21.0 ()
+    # Note that the backend talks over HTTP.
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
+    # TODO: Fill in with the ARN of your certificate.
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-west-2:984723316294:certificate/05b5cd66-7405-4e3b-ae5b-e70c89d295d6
+    # Only run SSL on the port named "https" below.
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
   creationTimestamp: null
   labels:
     io.kompose.service: ui
@@ -11,8 +17,11 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - name: "3000"
+  - name: http
     port: 80
+    targetPort: 3000
+  - name: https
+    port: 443
     targetPort: 3000
   selector:
     io.kompose.service: ui
