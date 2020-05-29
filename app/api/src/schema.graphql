@@ -121,7 +121,7 @@ type Query {
       """
     )
 
-  userFavoriteMovies(user_id:String): [Movie]
+  userFavoriteMovies(user_id:String orderBy: [_MovieOrdering] filter: _MovieFilter) : [Movie]
   @cypher(
     statement: """
       MATCH (u:User {id:$user_id})

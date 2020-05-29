@@ -36,8 +36,20 @@ const styles = theme => ({
 });
 
 const GET_MOVIE = gql`
-  query movies($user_id: String) {
-    userFavoriteMovies(user_id: $user_id) {
+  query movies(
+    $user_id: String
+    $first: Int
+    $offset: Int
+    $orderBy: [_MovieOrdering]
+    $filter: _MovieFilter
+  ) {
+    userFavoriteMovies(
+      user_id: $user_id
+      first: $first
+      offset: $offset
+      orderBy: $orderBy
+      filter: $filter
+    ) {
       id
       title
       likes
@@ -56,7 +68,15 @@ function MovieList(props) {
   const { classes } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("title");
+  const [page] = React.useState(0);
+  const [rowsPerPage] = React.useState(10);
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
+
+  const getFilter = () => {
+    return filterState.titleFilter.length > 0
+      ? { title_contains: filterState.titleFilter }
+      : {};
+  };
 
   const EraseFavorite = (movie_id, movie_title) => {
     RemoveFavorite({
@@ -73,7 +93,11 @@ function MovieList(props) {
 
   const { loading, data, error, refetch } = useQuery(GET_MOVIE, {
     variables: {
-      user_id: app.auth().currentUser.uid
+      user_id: app.auth().currentUser.uid,
+      first: rowsPerPage,
+      offset: rowsPerPage * page,
+      orderBy: orderBy + "_" + order,
+      filter: getFilter()
     }
   });
 
@@ -100,7 +124,7 @@ function MovieList(props) {
 
   return (
     <Paper className={classes.root}>
-      <Typography variant="h3" gutterBottom>
+      <Typography variant="h2" gutterBottom>
         {app.auth().currentUser.displayName} Favorite Movies!
       </Typography>
       <TextField
