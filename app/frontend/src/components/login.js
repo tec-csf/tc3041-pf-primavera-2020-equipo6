@@ -115,4 +115,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default withStyles(useStyles)(Login), withRouter(Login);
+export default withRouter(Login);

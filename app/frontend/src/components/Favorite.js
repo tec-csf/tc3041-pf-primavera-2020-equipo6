@@ -38,17 +38,17 @@ const styles = theme => ({
 const GET_MOVIE = gql`
   query movies(
     $user_id: String
+    $title_filter: String
     $first: Int
     $offset: Int
     $orderBy: [_MovieOrdering]
-    $filter: _MovieFilter
   ) {
     userFavoriteMovies(
       user_id: $user_id
+      title_filter: $title_filter
       first: $first
       offset: $offset
       orderBy: $orderBy
-      filter: $filter
     ) {
       id
       title
@@ -73,31 +73,43 @@ function MovieList(props) {
   const [filterState, setFilterState] = React.useState({ titleFilter: "" });
 
   const getFilter = () => {
-    return filterState.titleFilter.length > 0
-      ? { title_contains: filterState.titleFilter }
-      : {};
+    return filterState.titleFilter.length > 0 ? filterState.titleFilter : "";
   };
 
-  const EraseFavorite = (movie_id, movie_title) => {
+  const EraseFavorite = movie_id => {
     RemoveFavorite({
       variables: {
         user_id: app.auth().currentUser.uid,
         movie_id: movie_id
       }
     });
-    console.log("Favorite was removed, refetching...");
-    refetch();
   };
 
-  const [RemoveFavorite] = useMutation(REMOVE_FAVORITE);
+  const [RemoveFavorite, { loading: removeLoading }] = useMutation(
+    REMOVE_FAVORITE,
+    {
+      refetchQueries: [
+        {
+          query: GET_MOVIE,
+          variables: {
+            user_id: app.auth().currentUser.uid,
+            first: rowsPerPage,
+            offset: rowsPerPage * page,
+            orderBy: orderBy + "_" + order,
+            title_filter: getFilter()
+          }
+        }
+      ]
+    }
+  );
 
-  const { loading, data, error, refetch } = useQuery(GET_MOVIE, {
+  const { loading, data, error, variables } = useQuery(GET_MOVIE, {
     variables: {
       user_id: app.auth().currentUser.uid,
       first: rowsPerPage,
       offset: rowsPerPage * page,
       orderBy: orderBy + "_" + order,
-      filter: getFilter()
+      title_filter: getFilter()
     }
   });
 
@@ -140,9 +152,9 @@ function MovieList(props) {
           className: classes.input
         }}
       />
-      {loading && !error && <p>Loading...</p>}
-      {error && !loading && <p>Error</p>}
-      {data && !loading && !error && (
+      {(loading || removeLoading) && !error && <p>Loading...</p>}
+      {error && !loading && !removeLoading && <p>Error</p>}
+      {data && !loading && !removeLoading && !error && (
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
@@ -185,9 +197,7 @@ function MovieList(props) {
                   </TableCell>
                   <TableCell>{n.likes ? n.likes.toFixed(2) : "-"}</TableCell>
                   <TableCell>
-                    <Button onClick={() => EraseFavorite(n.id, n.title)}>
-                      Borrar
-                    </Button>
+                    <Button onClick={() => EraseFavorite(n.id)}>Borrar</Button>
                   </TableCell>
                 </TableRow>
               );
