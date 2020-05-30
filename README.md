@@ -89,6 +89,8 @@ Firebase es el servicio que usamos como parte de autenticación de usuarios y ma
 
 *[Incluya aquí un diagrama donde se aprecie la arquitectura de la solución propuesta, así como la interacción entre los diferentes componentes de la misma.]*
 
+![](diagramas/Microservicios.png)
+
 ### 3.3 Frontend
 
 *[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
