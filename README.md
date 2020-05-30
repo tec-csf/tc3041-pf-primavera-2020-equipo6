@@ -96,6 +96,10 @@ El motivo por el cuál elegimos Neo4j es por el manejo de varios nodos y relacio
 
 *[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
 
+Utilizamos Firebase para el registro, autenticación y manejo de sesiones para nuestros usuarios. Firebase tiene su propia nube donde se encarga de registrar y autenticar a los usuarios, generando una llave que nos regresa a nosotors. Utilizando rutas privadas, podemos confirmar si existe un usuario autenticado en la sesion, si sí, los dejamos entrar a la pagina principal, si no, los regresamos automaticamente al inicio de sesion.
+
+Para visualizar nuestros componentes, utilizamos React, que se encarga de renderizar.
+
 
 #### 3.3.1 Lenguaje de programación
 - Javascript
@@ -107,6 +111,7 @@ El motivo por el cuál elegimos Neo4j es por el manejo de varios nodos y relacio
 - Firebase
 #### 3.3.3 Librerías de funciones o dependencias
 Node
+Material-UI
 
 ### 3.4 Backend
 
@@ -118,6 +123,7 @@ Node
 #### 3.4.2 Framework
 - GraphQL
 #### 3.4.3 Librerías de funciones o dependencias
+- Apollo
 
 ### 3.5 API
 
