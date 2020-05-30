@@ -78,22 +78,24 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 
 ### 3.1 Modelos de *bases de datos* utilizados
 
-Los modelos que se usan en la solución son Neo4j y Firebase.
-No4j como modelo de grafos fue la opcón para modelar los nodos y relaciones principales de nuestro  proyecto, el esquema que definimos para la solución es el siguiente :
+Los modelos que se usan en la solución son Neo4j y Firebase:
 
-El motivo por el cuál elejimos Neo4j es por el manejo de varios nodos y relaciones que pueden exitir sin ser complicado, además dela alta disponibilidad, la rapidez de las consultas y sobre el query que manejamos para hacer la relación de que películas recomendará la aplicación.
+1. Neo4j como modelo de grafos fue la opción para modelar los nodos y relaciones principales de nuestro proyecto, el esquema que definimos para la solución es el siguiente:
+![](diagramas/Schema.png)
 
-Firebase es el servicio que usamos como parte de autenticación de usuarios y manejo de sesiones
+El motivo por el cuál elegimos Neo4j es por el manejo de varios nodos y relaciones que pueden existir sin ser complicado, además de la alta disponibilidad, la rapidez de las consultas y sobre el query que manejamos para hacer la relación de que películas recomendará la aplicación.
+
+2. Firebase es la base de datos que se encarga de nuestro registro y autenticación, al igual que el manejo de sesiones. El motivo por el cual elegimos Firebase como nuestro manejador de sesiones es por su sencilla instalación, uso y seguridad que provee a nuestra aplicación y usuarios.
+
 
 ### 3.2 Arquitectura de la solución
-
-*[Incluya aquí un diagrama donde se aprecie la arquitectura de la solución propuesta, así como la interacción entre los diferentes componentes de la misma.]*
 
 ![](diagramas/Microservicios.png)
 
 ### 3.3 Frontend
 
 *[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
+
 
 #### 3.3.1 Lenguaje de programación
 - Javascript
@@ -102,8 +104,10 @@ Firebase es el servicio que usamos como parte de autenticación de usuarios y ma
 - HTML
 #### 3.3.2 Framework
 - React
+- Firebase
 #### 3.3.3 Librerías de funciones o dependencias
 Node
+
 ### 3.4 Backend
 
 *[Incluya aquí una explicación de la solución utilizada para el backend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
