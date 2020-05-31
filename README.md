@@ -81,7 +81,7 @@ A continuación aparecen descritos los diferentes elementos que forman parte de 
 Los modelos que se usan en la solución son Neo4j y Firebase:
 
 1. Neo4j como modelo de grafos fue la opción para modelar los nodos y relaciones principales de nuestro proyecto, el esquema que definimos para la solución es el siguiente:
-![](diagramas/Schema.png)
+![](datasets/Schema.png)
 
 El motivo por el cuál elegimos Neo4j es por el manejo de varios nodos y relaciones que pueden existir sin ser complicado, además de la alta disponibilidad, la rapidez de las consultas y sobre el query que manejamos para hacer la relación de que películas recomendará la aplicación.
 
@@ -90,16 +90,16 @@ El motivo por el cuál elegimos Neo4j es por el manejo de varios nodos y relacio
 
 ### 3.2 Arquitectura de la solución
 
-![](diagramas/Microservicios.png)
+![](datasets/Microservicios.png)
 
 ### 3.3 Frontend
 
-*[Incluya aquí una explicación de la solución utilizada para el frontend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
+Utilizamos Firebase para el registro, autenticación y manejo de sesiones para nuestros usuarios. Firebase tiene su propia nube donde se encarga de registrar y autenticar a los usuarios, generando una llave que nos regresa a nosotros. Utilizando rutas privadas, podemos confirmar si existe un usuario autenticado en la sesión, si sí, los dejamos entrar a la página principal, si no, los regresamos automáticamente al inicio de sesión.
+- https://firebase.google.com/
 
-Utilizamos Firebase para el registro, autenticación y manejo de sesiones para nuestros usuarios. Firebase tiene su propia nube donde se encarga de registrar y autenticar a los usuarios, generando una llave que nos regresa a nosotors. Utilizando rutas privadas, podemos confirmar si existe un usuario autenticado en la sesion, si sí, los dejamos entrar a la pagina principal, si no, los regresamos automaticamente al inicio de sesion.
-
-Para visualizar nuestros componentes, utilizamos React, que se encarga de renderizar.
-
+Para visualizar nuestros componentes, utilizamos React, que se encarga de renderizar los componentes HTML, CSS, JS, al igual que las respuestas de GraphQl y los usuarios autenticados por Firebase. Descargamos la librería de @Material-UI para los componentes visuales de la aplicación.
+- https://reactjs.org/
+- https://material-ui.com/
 
 #### 3.3.1 Lenguaje de programación
 - Javascript
@@ -112,10 +112,16 @@ Para visualizar nuestros componentes, utilizamos React, que se encarga de render
 #### 3.3.3 Librerías de funciones o dependencias
 Node
 Material-UI
+Tindercards -https://www.npmjs.com/package/react-tinder-card
 
 ### 3.4 Backend
 
-*[Incluya aquí una explicación de la solución utilizada para el backend del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
+Utilizamos el API de Apollo como traductor entre los POST/GET que mandamos desde React hacia GraphQL, traduciendo los POST/GET a Cypher, los cuales puede utilizar GraphQL para comunicarse con la base de datos de Neo4j para recibir y subir información.
+
+Escribimos los Cypher queries en el SCHEMA de GraphQL, donde tenemos cada componente del SCHEMA de la base de datos de Neo4j y sus Cyphers. Tambien tenemos Mutaciones (POST) y nuestros Queries (GET).
+
+- https://graphql.org/
+- https://www.apollographql.com/
 
 #### 3.4.1 Lenguaje de programación
 - JSON
