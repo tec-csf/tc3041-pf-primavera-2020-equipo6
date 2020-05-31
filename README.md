@@ -110,9 +110,9 @@ Para visualizar nuestros componentes, utilizamos React, que se encarga de render
 - React
 - Firebase
 #### 3.3.3 Librerías de funciones o dependencias
-Node
-Material-UI
-Tindercards -https://www.npmjs.com/package/react-tinder-card
+- Node
+- Material-UI
+- Tindercards -https://www.npmjs.com/package/react-tinder-card
 
 ### 3.4 Backend
 
@@ -152,13 +152,34 @@ Escribimos los Cypher queries en el SCHEMA de GraphQL, donde tenemos cada compon
 * **Códigos de error**:
 
 ## 3.6 Pasos a seguir para utilizar el proyecto
-Exsted dos formas de utilizar el proyecto:
+Existen dos formas de utilizar el proyecto, una de forma local y otra remota:
 
-- Una si se requiere correr como local, para esto hay que crear un directorio con el nombre que se desee, posterior abrir una terminal de docker y cambiarse a ese directorio y hacer un git clone de este repositorio. Ya clonado se debe ejecutar el siguiente comando : cd tc3041-pf-primavera-2020-equipo6/app , siguiente se ejecuta el comando docker-compose build, cdespués el docker-compose up -d, y adicional si se está corriendo docker como una máquina virtual usar el comando docker-machine ip, así ya en el navegador de su preferencia ingresar ipDeLaMaquina:3000
+1. Hay que crear un directorio con el nombre que se desee, posterior abrir una terminal de docker y cambiarse a ese directorio y hacer un git clone de este repositorio. 
+2. Ya clonado se debe ejecutar el siguiente comando : *cd tc3041-pf-primavera-2020-equipo6/app*.
+3. Dentro de la carpeta, se ejecuta el comando *docker-compose build*.
+4. Una vez instalado las imagenes en docker, utilizamos el comando *docker-compose up -d*.
+5. (Nota) Si se está corriendo docker como una máquina virtual y no sabes su ip, usamos el comando *docker-machine ip*.
+6. Ya que todos los contenedores esten corriendo, en el navegador de su preferencia ingresar a *localhost:3000* ó *<virtual-machine-ip>:3000*
+7. (Adicional) si quieren probar los Cyphers de GraphQL, pueden ingresar a *localhost:4001* ó <virtual-machine-ip>:4001*
 
 - La otra opción es usar el proyecto orquestado con kubernetes en la nube, para eso solamente ingresar a la liga https://semy.io
 
-Ya que una de las opciones que hayamos elegido nos muestre la página de login es necesario crear una cuenta si no se tiene una, para eso se da click en "click here" donde seremos redirigidos a la interfaz de crear cuenta donde ingresaremos un nombre de usuario, mail (estos dos primeros pasos deben ser únicos) y finalmente una contraseña de 6 caracteres como mínimos. Si todo está correcto o ya tenemos cuenta e ingresamos bien los datos y damos login se nos ingresa a la interfaz principal donde tendremos la película que nos está recomendando y ya podremos hacer los 4 tipos de swipe (swipe arriba agrega esa película a la sección de favoritos). Otras acciones que podremos realiazar son la busqueda de películas, ver el número de likes y filtrados en la sección movies, esto mismo para la sección de users donde veremos que usuarios tienen más parecidos gustos a nosotros, siendo 1 el valor de más parecido y -1 el de menos parecido, la seccion de favorites funciona similar ya que encontraremos películas que fuerno agregadas a nuestra lista y podremos ver la información de sus likes y nombre, además del filtrado y busqueda, también es posible borrar una película de favoritos con el botón borrar. Finalmente si deseamos cerrar sesión, únicamente se da click en la opción signout y seremos redirigidos a la pantalla de login donde si deseamos volver a ingresar hay que repetir este proceso.
+1. Una vez dentro de la aplicacion, seremos redirigidos la página de login, donde puedes ingresar a la aplicacion si tienes una cuenta.
+2. Si no tienes una cuenta con la aplicacion, puede acceder a la pagina de Registro dandole click en "click here" donde seremos redirigidos a la pagina de *registro*.
+3. Aqui sera necesario ingresar un *nombre de usuario*, una *cuenta de correo electronico VALIDA* y una contraseña de 6 caracteres como mínimo. 
+4. Si todo está correcto nos redirige a la interfaz principal donde tendremos una carta con una película recomendada.
+5. Tenemos 4 acciones con la tarjeta (las cuales llamaremos swipes) los cuales hacen lo siguiente dependiendo la direccion a donde muevas la tarjeta:
+    5.1 *Swipe Izquierda*: Le das *Dislike* a la pelicula.
+    5.2 *Swipe Arriba*: Agregas la pelicula tus favoritos.
+    5.3 *Swipe Derecha*: Le das *Like* a la pelicula.
+    5.4 *Swipe Abajo*: No has visto la pelicula.
+    
+6. En la pagina de Peliculas se encuentran todas las peliculas en la base de datos, donde podemos ver su nombre al igual que su numero de likes. Se puede filtrar por titulo y numero de likes. Tambien, tenemos un buscador que nos permite buscar cualquier pelicula por su titulo.
+
+7. En la pagina de Usuarios se enceuntran todos los usuarios registrados en la aplicacion, al igual que la similaridad que tienen contigo (valor de -1 a 1) entre mas alto sea el valor, mas peliculas en comun tienen contigo y viceversa.
+8. En la pagina de favoritos podemos ver todas las peliculas favoritas agegadas por el usuario, compartiendo las mismas funcionaidades que la pagina de Peliculas. Adicionalemnte, el usuario puede borrar cualquier pelicula favorito por si llega a cambiar de opinion.
+9. Finalmente si deseamos cerrar sesión, únicamente se da click en la opción Signout y seremos redirigidos a la pantalla de login.
+
 ## 4. Referencias
 
 - https://neo4j.com/graphacademy/online-training/data-science/
