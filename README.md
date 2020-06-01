@@ -33,14 +33,11 @@ El proyecto debe seguir la siguiente estructura de carpetas:
 ```
 - / 			        # Raíz de todo el proyecto
     - README.md			# Archivo con los datos del proyecto (este archivo)
-    - frontend			# Carpeta con la solución del frontend (Web app)
-    - backend			# Carpeta con la solución del backend (CMS)
-    - api			# Carpeta con la solución de la API
+    - app
+        - frontend			# Carpeta con la solución del frontend (Web app)
+        - api			# Carpeta con la solución de la API
     - datasets		        # Carpeta con los datasets y recursos utilizados (csv, json, audio, videos, entre otros)
     - dbs			# Carpeta con los modelos, catálogos y scripts necesarios para generar las bases de datos
-    - docs			# Carpeta con la documentación del proyecto
-        - stage_f               # Documentos de la entrega final
-        - manuals               # Manuales y guías
 ```
 
 ### 1.3 Documentación  del proyecto
@@ -131,27 +128,16 @@ Escribimos los Cypher queries en el SCHEMA de GraphQL, donde tenemos cada compon
 #### 3.4.3 Librerías de funciones o dependencias
 - Apollo
 
-### 3.5 API
+### 3.5 Arquitectura en la nube
+La aplicación está compuesta por varios microservicios descritos previamente. Esta es la arquitectura de despliegue de los mismos.
+#### 3.5.1 Base de datos Neo4j
+Debido a que el servicio en la nube de Neo4j (Aura) es un servicio de paga, decidimos alojar la base de datos en una instancia EC2 de AWS. Ésta se encuentra en la liga https://db.semy.io:7473 y atiende a todas las peticiones de la aplicación. La comunicación se lleva a cabo mediante TLS (certificado obtenido con Let's Encrypt).
+#### 3.5.2 Base de datos Firebase
+Para el manejo de usuarios utilizamos el servicio de Firebase. No fue necesario desplegar una instancia ya que Google ofrece el servicio de manera gratuita.
+#### 3.5.3 App
+Como se mencionó anteriormente, la app se divide en microservicios incluyendo el Front end y el Back end. Para desplegarlos utilizamos [Kops](https://github.com/kubernetes/kops). Las imagenes de Docker creadas para la app se pueden encontrar en Docker Hub, [Front end](https://hub.docker.com/repository/docker/semylevy/movie-frontend) y [Back end](https://hub.docker.com/repository/docker/semylevy/movie-api). Kops nos permite desplegar la aplicacion en un cluster de Kubernetes, nuestra configuración cuenta con un nodo master y dos esclavos. La aplicación se distribuye en distintas instancias EC2 de AWS y el almacenamiento de lleva a cabo en Buckets de AWS S3. Utilizando un Load Balancer, el URL externo del frontend apunta a https://semy.io, donde la app puede ser utilizada.
 
-*[Incluya aquí una explicación de la solución utilizada para implementar la API del proyecto. No olvide incluir las ligas o referencias donde se puede encontrar información de los lenguajes de programación, frameworks y librerías utilizadas.]*
-
-#### 3.5.1 Lenguaje de programación
-#### 3.5.2 Framework
-#### 3.5.3 Librerías de funciones o dependencias
-
-*[Incluya aquí una explicación de cada uno de los endpoints que forman parte de la API. Cada endpoint debe estar correctamente documentado.]*
-
-*[Por cada endpoint debe incluir lo siguiente:]*
-
-* **Descripción**:
-* **URL**:
-* **Verbos HTTP**:
-* **Headers**:
-* **Formato JSON del cuerpo de la solicitud**: 
-* **Formato JSON de la respuesta**:
-* **Códigos de error**:
-
-## 3.6 Pasos a seguir para utilizar el proyecto
+### 3.6 Pasos a seguir para utilizar el proyecto
 Existen dos formas de utilizar el proyecto, una de forma local y otra remota:
 
 1. Hay que crear un directorio con el nombre que se desee, posterior abrir una terminal de docker y cambiarse a ese directorio y hacer un git clone de este repositorio. 
